@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - Draexlmaier ZSB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: #1e3c72;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .info-box {
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .info-box h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-box li {
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .info-box li:before {
+            content: "✓";
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 15px;
+            }
+            
+            .header, .content {
+                padding: 25px 20px;
+            }
+            
+            .form-header h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">DZ</div>
+                <div class="logo-text">
+                    <h1>Draexlmaier ZSB</h1>
+                    <p>Employee Registration Portal</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="form-header">
+                <h2>New Employee Registration</h2>
+                <p>Enter your matricule number to request account access. Your request will be reviewed by administration.</p>
+            </div>
+
+            <div id="statusMessage" class="status-message"></div>
+
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="matricule">Matricule Number *</label>
+                    <div class="input-with-icon">
+                        <div class="input-icon">🆔</div>
+                        <input 
+                            type="text" 
+                            id="matricule" 
+                            class="form-control" 
+                            placeholder="Enter your matricule number" 
+                            required
+                            pattern="[A-Za-z0-9]{6,10}"
+                            title="Matricule should be 6-10 alphanumeric characters"
+                        >
+                    </div>
+                    <small style="color: #666; font-size: 12px; margin-top: 5px; display: block;">
+                        Example: EMP001, AGT123, SUP001
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Department (Optional)</label>
+                    <div class="input-with-icon">
+                        <div class="input-icon">🏢</div>
+                        <select id="department" class="form-control">
+                            <option value="">Select Department</option>
+                            <option value="COCPIT">COCPIT - Cockpit Systems</option>
+                            <option value="MM">MM - Module Manufacturing</option>
+                            <option value="THS">THS - Thermal Handling Systems</option>
+                            <option value="INR">INR - Instrumentation & Navigation</option>
+                            <option value="Basis">Basis - Base Systems</option>
+                            <option value="LOGISTICS">Logistics Department</option>
+                            <option value="OTHER">Other Department</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-submit">
+                    Submit Registration Request
+                </button>
+            </form>
+
+            <div class="info-box">
+                <h4>Registration Process:</h4>
+                <ul>
+                    <li>Enter your official matricule number</li>
+                    <li>Submit the registration request</li>
+                    <li>Administration will review your request</li>
+                    <li>You will receive notification when approved</li>
+                    <li>After approval, use default password: <strong>drax123</strong></li>
+                    <li>Complete your profile information on first login</li>
+                </ul>
+            </div>
+
+            <div class="back-link">
+                <a href="index.html">← Back to Login Page</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form submission handler
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const matricule = document.getElementById('matricule').value.trim();
+            const department = document.getElementById('department').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            // Reset status message
+            statusMessage.className = 'status-message';
+            statusMessage.textContent = '';
+            
+            // Validation
+            if (!matricule) {
+                showError('Please enter your matricule number');
+                return;
+            }
+
+            if (matricule.length < 3) {
+                showError('Matricule number is too short');
+                return;
+            }
+
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span> Processing Request...';
+
+            try {
+                // Simulate API call (in production, this would call your backend)
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Check if this is a demo matricule
+                if (matricule.toUpperCase() === 'DEMO001') {
+                    showError('DEMO001 is reserved for demo purposes. Please use a different matricule.');
+                    return;
+                }
+                
+                // Simulate successful registration
+                const requestId = 'REQ-' + Date.now();
+                
+                // Show success message
+                showSuccess(`
+                    ✅ Registration Request Submitted Successfully!<br><br>
+                    <strong>Request ID:</strong> ${requestId}<br>
+                    <strong>Matricule:</strong> ${matricule}<br>
+                    <strong>Status:</strong> Pending Approval<br><br>
+                    Your request has been sent to administration for review.
+                    You will be notified once your account is approved.
+                `);
+                
+                // Reset form
+                document.getElementById('registrationForm').reset();
+                
+                // Save to localStorage for demo purposes
+                saveRegistrationRequest(matricule, department, requestId);
+                
+            } catch (error) {
+                showError('An error occurred. Please try again.');
+                console.error('Registration error:', error);
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Registration Request';
+            }
+        });
+
+        function showError(message) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.className = 'status-message error';
+            statusMessage.innerHTML = `❌ ${message}`;
+            statusMessage.style.display = 'block';
+        }
+
+        function showSuccess(message) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.className = 'status-message success';
+            statusMessage.innerHTML = message;
+            statusMessage.style.display = 'block';
+            
+            // Auto-hide after 10 seconds
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 10000);
+        }
+
+        function saveRegistrationRequest(matricule, department, requestId) {
+            // For demo purposes - in production, this would call an API
+            const requests = JSON.parse(localStorage.getItem('registrationRequests') || '[]');
+            
+            requests.push({
+                id: requestId,
+                matricule: matricule,
+                department: department,
+                status: 'pending',
+                requestedAt: new Date().toISOString(),
+                reviewedBy: null,
+                reviewedAt: null
+            });
+            
+            localStorage.setItem('registrationRequests', JSON.stringify(requests));
+            
+            // Notify admin (demo only)
+            console.log('New registration request saved:', {
+                requestId,
+                matricule,
+                department,
+                timestamp: new Date().toLocaleString()
+            });
+            
+            // In production, this would send a notification to admin
+            alert('📧 Notification sent to administration for review.');
+        }
+
+        // Auto-fill for testing
+        window.addEventListener('load', function() {
+            // You can remove this in production
+            if (window.location.search.includes('test=true')) {
+                document.getElementById('matricule').value = 'EMP' + Math.floor(Math.random() * 1000);
+                document.getElementById('department').value = 'COCPIT';
+            }
+        });
+    </script>
+</body>
+</html>

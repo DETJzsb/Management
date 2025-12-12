@@ -402,7 +402,7 @@
 
             // For DEMO001 - Direct to dashboard
             if (matricule === 'DEMO001') {
-                window.location.href = '/dashboard.html';
+                window.location.href = 'Management/dashboard.html';
                 return;
             }
 
@@ -415,9 +415,9 @@
                 const needsProfile = Math.random() > 0.5;
                 
                 if (needsProfile) {
-                    window.location.href = '/profile-complete.html';
+                    window.location.href = '/Management/profile-complete.html';
                 } else {
-                    window.location.href = '/dashboard.html';
+                    window.location.href = '/Management/dashboard.html';
                 }
             }, 1000);
         });

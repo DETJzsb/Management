@@ -1,0 +1,446 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draexlmaier ZSB - Production Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 1200px;
+            overflow: hidden;
+            display: flex;
+            min-height: 700px;
+        }
+
+        /* Left Side - Branding */
+        .brand-side {
+            flex: 1;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: #1e3c72;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .features {
+            margin-top: 40px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .feature-text h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .feature-text p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Right Side - Login */
+        .login-side {
+            flex: 1;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h2 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .demo-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .demo-section h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .demo-credentials {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .credential {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            border: 1px solid #e1e5e9;
+        }
+
+        .credential strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+
+        .links a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .brand-side, .login-side {
+                padding: 40px 20px;
+            }
+            
+            .demo-credentials {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Side - Branding -->
+        <div class="brand-side">
+            <div>
+                <div class="logo">
+                    <div class="logo-icon">DZ</div>
+                    <div class="logo-text">
+                        <h1>Draexlmaier ZSB</h1>
+                        <p>Production Logistics Management System</p>
+                    </div>
+                </div>
+
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-text">
+                            <h3>Production Planning</h3>
+                            <p>Weekly production schedules and cable management</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">🔧</div>
+                        <div class="feature-text">
+                            <h3>Feeding Agents Management</h3>
+                            <p>Real-time tracking of cable distribution</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">📱</div>
+                        <div class="feature-text">
+                            <h3>Real-time Monitoring</h3>
+                            <p>Live updates from production lines</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">📈</div>
+                        <div class="feature-text">
+                            <h3>Analytics & Reports</h3>
+                            <p>Detailed performance analysis</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>© 2024 Draexlmaier ZSB. All rights reserved.</p>
+                <p>For assistance, contact IT Department</p>
+            </div>
+        </div>
+
+        <!-- Right Side - Login -->
+        <div class="login-side">
+            <div class="login-header">
+                <h2>Welcome Back</h2>
+                <p>Sign in to access the production management system</p>
+            </div>
+
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="matricule">Matricule Number</label>
+                    <div class="input-with-icon">
+                        <div class="input-icon">👤</div>
+                        <input 
+                            type="text" 
+                            id="matricule" 
+                            class="form-control" 
+                            placeholder="Enter your matricule" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-with-icon">
+                        <div class="input-icon">🔒</div>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            class="form-control" 
+                            placeholder="Enter password" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Sign In
+                </button>
+
+                <div class="demo-section">
+                    <h4>Demo Access (For Testing)</h4>
+                    <div class="demo-credentials">
+                        <div class="credential">
+                            <strong>Demo User</strong>
+                            Matricule: DEMO001
+                        </div>
+                        <div class="credential">
+                            <strong>Default Password</strong>
+                            Password: drax123
+                        </div>
+                    </div>
+                </div>
+
+                <div class="links">
+                    <a href="#" onclick="showRegister()">New User Registration</a>
+                    <a href="#" onclick="showForgotPassword()">Forgot Password?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Handle Login Form Submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const matricule = document.getElementById('matricule').value;
+            const password = document.getElementById('password').value;
+            
+            // Basic validation
+            if (!matricule || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Default password check
+            if (password !== 'drax123') {
+                alert('Invalid password. Default password is: drax123');
+                return;
+            }
+
+            // For DEMO001 - Direct to dashboard
+            if (matricule === 'DEMO001') {
+                window.location.href = '/dashboard.html';
+                return;
+            }
+
+            // In real implementation, this would call an API
+            alert(`Login attempt for matricule: ${matricule}\n\nIn production, this would verify credentials with Supabase.`);
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Check if user needs to complete profile
+                const needsProfile = Math.random() > 0.5;
+                
+                if (needsProfile) {
+                    window.location.href = '/profile-complete.html';
+                } else {
+                    window.location.href = '/dashboard.html';
+                }
+            }, 1000);
+        });
+
+        // Show registration modal
+        function showRegister() {
+            const matricule = prompt('Enter your matricule number for registration:');
+            if (matricule) {
+                alert(`Registration request submitted for: ${matricule}\n\nAdministration will review your request.`);
+            }
+        }
+
+        // Show forgot password
+        function showForgotPassword() {
+            alert('Default password for all users is: drax123\n\nContact IT department for password reset.');
+        }
+
+        // Auto-fill demo credentials on page load
+        window.addEventListener('load', function() {
+            // Optional: Auto-fill demo credentials for testing
+            // document.getElementById('matricule').value = 'DEMO001';
+            // document.getElementById('password').value = 'drax123';
+        });
+    </script>
+</body>
+</html>

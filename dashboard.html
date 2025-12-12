@@ -1,4 +1,3 @@
-<!-- public/dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,12 +5,443 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Draexlmaier ZSB</title>
     <style>
-        /* Add basic styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .dashboard-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .dashboard-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: #1e3c72;
+        }
+
+        .dashboard-logo-text h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .dashboard-logo-text p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .dashboard-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .dashboard-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .dashboard-user-info {
+            text-align: right;
+        }
+
+        .dashboard-user-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .dashboard-user-role {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .dashboard-logout-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .dashboard-logout-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content */
+        .dashboard-content {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .welcome-banner h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-banner p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Quick Stats */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e1e5e9;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon.upload {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .stat-icon.team {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .stat-icon.reports {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .stat-icon.locations {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e1e5e9;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .action-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .action-card h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .action-card p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .dashboard-user {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .dashboard-content {
+                padding: 20px;
+            }
+            
+            .welcome-banner {
+                padding: 20px;
+            }
+            
+            .welcome-banner h1 {
+                font-size: 24px;
+            }
+            
+            .dashboard-stats,
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Welcome to Dashboard</h1>
-    <p>This is a static dashboard page</p>
-    <a href="index.html">Back to Login</a>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="dashboard-logo">
+            <div class="dashboard-logo-icon">DZ</div>
+            <div class="dashboard-logo-text">
+                <h1>Draexlmaier ZSB</h1>
+                <p>Production Management System</p>
+            </div>
+        </div>
+        
+        <div class="dashboard-user">
+            <div class="dashboard-avatar">👤</div>
+            <div class="dashboard-user-info">
+                <div class="dashboard-user-name" id="userName">Loading...</div>
+                <div class="dashboard-user-role" id="userRole">Role: Loading...</div>
+            </div>
+            <button class="dashboard-logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <main class="dashboard-content">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <h1 id="welcomeMessage">Welcome, User 👋</h1>
+            <p id="userInfo">You are now in the production management system</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-icon upload">📤</div>
+                <div class="stat-value" id="uploadCount">0</div>
+                <div class="stat-label">Excel Files Uploaded</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon team">👥</div>
+                <div class="stat-value" id="teamCount">0</div>
+                <div class="stat-label">Active Team Members</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon reports">📊</div>
+                <div class="stat-value" id="reportCount">0</div>
+                <div class="stat-label">Reports Generated</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon locations">📍</div>
+                <div class="stat-value" id="locationCount">0</div>
+                <div class="stat-label">Production Locations</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <a href="upload.html" class="action-card">
+                <div class="action-icon" style="color: #007bff;">📤</div>
+                <h3>Upload Excel File</h3>
+                <p>Upload weekly production plan Excel files for processing</p>
+            </a>
+            
+            <a href="team.html" class="action-card">
+                <div class="action-icon" style="color: #28a745;">👥</div>
+                <h3>Team Management</h3>
+                <p>View and manage team members, shifts, and assignments</p>
+            </a>
+            
+            <a href="reports.html" class="action-card">
+                <div class="action-icon" style="color: #ffc107;">📈</div>
+                <h3>Reports & Analytics</h3>
+                <p>View production reports, performance analytics, and insights</p>
+            </a>
+            
+            <a href="locations.html" class="action-card">
+                <div class="action-icon" style="color: #dc3545;">📍</div>
+                <h3>Production Locations</h3>
+                <p>View production line maps and workstation locations</p>
+            </a>
+        </div>
+    </main>
+
+    <script>
+        // Get user data from URL or localStorage
+        function getUserData() {
+            // Try to get from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const matricule = urlParams.get('matricule') || 'DEMO001';
+            const name = urlParams.get('name') || 'Demo User';
+            const role = urlParams.get('role') || 'Agent';
+            const department = urlParams.get('department') || 'COCPIT';
+            
+            return {
+                matricule,
+                name,
+                role,
+                department
+            };
+        }
+
+        // Update dashboard with user data
+        function updateDashboard() {
+            const user = getUserData();
+            
+            // Update welcome message
+            document.getElementById('welcomeMessage').textContent = `Welcome, ${user.name} 👋`;
+            
+            // Update user info based on role
+            let userInfo = '';
+            switch(user.role.toLowerCase()) {
+                case 'directeur':
+                    userInfo = 'You are now in the Director Dashboard';
+                    break;
+                case 'supervisor':
+                    userInfo = `You are now supervising ${user.department} department`;
+                    break;
+                case 'agent':
+                    userInfo = `You are now in ${user.department} as a Feeding Agent`;
+                    break;
+                default:
+                    userInfo = 'You are now in the production management system';
+            }
+            document.getElementById('userInfo').textContent = userInfo;
+            
+            // Update header
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userRole').textContent = `Role: ${user.role} • ${user.department}`;
+            
+            // Update stats (demo data)
+            updateStats();
+        }
+
+        // Update statistics with demo data
+        function updateStats() {
+            // Demo data - in production this would come from an API
+            document.getElementById('uploadCount').textContent = '12';
+            document.getElementById('teamCount').textContent = '45';
+            document.getElementById('reportCount').textContent = '8';
+            document.getElementById('locationCount').textContent = '320';
+        }
+
+        // Logout function
+        function logout() {
+            // Clear any session data
+            localStorage.removeItem('userData');
+            sessionStorage.clear();
+            
+            // Redirect to login page
+            window.location.href = 'index.html';
+        }
+
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDashboard();
+            
+            // Check if user is logged in (demo check)
+            const user = getUserData();
+            if (user.matricule === 'DEMO001') {
+                // Demo user - show demo notification
+                console.log('Demo user logged in');
+            }
+            
+            // Simulate loading data
+            setTimeout(updateStats, 500);
+        });
+
+        // Handle back button
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                updateDashboard();
+            }
+        });
+    </script>
 </body>
 </html>

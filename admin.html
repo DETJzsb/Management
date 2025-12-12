@@ -753,4 +753,366 @@
                     </select>
                 </div>
                 
-                <div class="form
+                <div class="form-group">
+                    <label for="rejectionNotes">Additional Notes (Optional)</label>
+                    <textarea id="rejectionNotes" class="form-control" rows="4" placeholder="Provide detailed explanation for rejection..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" onclick="rejectRequest()" style="background: #dc3545;">Reject Request</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo data (in production, this would come from API)
+        let demoRequests = [
+            {
+                id: 'REQ-001',
+                matricule: 'EMP001',
+                department: 'COCPIT',
+                requestedAt: '2024-01-15 09:30',
+                status: 'pending'
+            },
+            {
+                id: 'REQ-002',
+                matricule: 'EMP002',
+                department: 'MM',
+                requestedAt: '2024-01-15 10:15',
+                status: 'pending'
+            },
+            {
+                id: 'REQ-003',
+                matricule: 'EMP003',
+                department: 'THS',
+                requestedAt: '2024-01-14 14:20',
+                status: 'approved'
+            },
+            {
+                id: 'REQ-004',
+                matricule: 'EMP004',
+                department: 'INR',
+                requestedAt: '2024-01-14 11:45',
+                status: 'rejected'
+            }
+        ];
+
+        let demoActivities = [
+            {
+                time: '2024-01-15 10:30',
+                action: 'User Registration',
+                user: 'EMP005',
+                details: 'New registration request submitted'
+            },
+            {
+                time: '2024-01-15 09:45',
+                action: 'Account Approved',
+                user: 'EMP003',
+                details: 'User account approved and activated'
+            },
+            {
+                time: '2024-01-14 16:20',
+                action: 'Account Rejected',
+                user: 'EMP004',
+                details: 'Registration rejected - Invalid matricule'
+            }
+        ];
+
+        // Current request being processed
+        let currentRequestId = null;
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadRegistrationRequests();
+            loadActivities();
+            updateStatistics();
+            
+            // Load from localStorage if available
+            const savedRequests = localStorage.getItem('registrationRequests');
+            if (savedRequests) {
+                const parsedRequests = JSON.parse(savedRequests);
+                demoRequests = [...demoRequests, ...parsedRequests];
+                loadRegistrationRequests();
+            }
+        });
+
+        function loadRegistrationRequests() {
+            const tbody = document.getElementById('requestsBody');
+            tbody.innerHTML = '';
+            
+            demoRequests.forEach(request => {
+                const row = document.createElement('tr');
+                
+                // Format date
+                const date = new Date(request.requestedAt);
+                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                // Status badge
+                let statusBadge = '';
+                if (request.status === 'pending') {
+                    statusBadge = '<span class="status-badge status-pending">Pending</span>';
+                } else if (request.status === 'approved') {
+                    statusBadge = '<span class="status-badge status-approved">Approved</span>';
+                } else {
+                    statusBadge = '<span class="status-badge status-rejected">Rejected</span>';
+                }
+                
+                // Action buttons
+                let actions = '';
+                if (request.status === 'pending') {
+                    actions = `
+                        <div class="actions-cell">
+                            <button class="btn-action btn-approve" onclick="openApproveModal('${request.id}')">Approve</button>
+                            <button class="btn-action btn-reject" onclick="openRejectModal('${request.id}')">Reject</button>
+                            <button class="btn-action btn-view" onclick="viewRequest('${request.id}')">View</button>
+                        </div>
+                    `;
+                } else {
+                    actions = `
+                        <div class="actions-cell">
+                            <button class="btn-action btn-view" onclick="viewRequest('${request.id}')">View</button>
+                        </div>
+                    `;
+                }
+                
+                row.innerHTML = `
+                    <td>${request.id}</td>
+                    <td><strong>${request.matricule}</strong></td>
+                    <td>${request.department || 'Not specified'}</td>
+                    <td>${formattedDate}</td>
+                    <td>${statusBadge}</td>
+                    <td>${actions}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            updateStatistics();
+        }
+
+        function loadActivities() {
+            const tbody = document.getElementById('activitiesBody');
+            tbody.innerHTML = '';
+            
+            demoActivities.forEach(activity => {
+                const row = document.createElement('tr');
+                
+                const date = new Date(activity.time);
+                const formattedTime = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                row.innerHTML = `
+                    <td>${formattedTime}</td>
+                    <td>${activity.action}</td>
+                    <td>${activity.user}</td>
+                    <td>${activity.details}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateStatistics() {
+            const pending = demoRequests.filter(r => r.status === 'pending').length;
+            const approved = demoRequests.filter(r => r.status === 'approved').length;
+            const rejected = demoRequests.filter(r => r.status === 'rejected').length;
+            const total = demoRequests.length;
+            
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('approvedCount').textContent = approved;
+            document.getElementById('rejectedCount').textContent = rejected;
+            document.getElementById('totalUsers').textContent = total;
+        }
+
+        function openApproveModal(requestId) {
+            currentRequestId = requestId;
+            const request = demoRequests.find(r => r.id === requestId);
+            
+            if (request) {
+                document.getElementById('modalDetails').innerHTML = `
+                    <p><strong>Matricule:</strong> ${request.matricule}</p>
+                    <p><strong>Department:</strong> ${request.department || 'Not specified'}</p>
+                    <p><strong>Request Date:</strong> ${request.requestedAt}</p>
+                    <p>Assign department and role for this user:</p>
+                `;
+                
+                document.getElementById('approvalModal').style.display = 'flex';
+            }
+        }
+
+        function openRejectModal(requestId) {
+            currentRequestId = requestId;
+            const request = demoRequests.find(r => r.id === requestId);
+            
+            if (request) {
+                document.getElementById('rejectDetails').innerHTML = `
+                    <p><strong>Matricule:</strong> ${request.matricule}</p>
+                    <p><strong>Department:</strong> ${request.department || 'Not specified'}</p>
+                    <p><strong>Request Date:</strong> ${request.requestedAt}</p>
+                    <p>Please provide reason for rejection:</p>
+                `;
+                
+                document.getElementById('rejectionModal').style.display = 'flex';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('approvalModal').style.display = 'none';
+            document.getElementById('rejectionModal').style.display = 'none';
+            currentRequestId = null;
+        }
+
+        function approveRequest() {
+            const department = document.getElementById('assignDepartment').value;
+            const role = document.getElementById('assignRole').value;
+            const shift = document.getElementById('assignShift').value;
+            const notes = document.getElementById('adminNotes').value;
+            
+            if (!department) {
+                alert('Please select a department');
+                return;
+            }
+            
+            const requestIndex = demoRequests.findIndex(r => r.id === currentRequestId);
+            if (requestIndex !== -1) {
+                // Update request status
+                demoRequests[requestIndex].status = 'approved';
+                demoRequests[requestIndex].assignedDepartment = department;
+                demoRequests[requestIndex].assignedRole = role;
+                demoRequests[requestIndex].assignedShift = shift;
+                demoRequests[requestIndex].adminNotes = notes;
+                demoRequests[requestIndex].approvedAt = new Date().toISOString();
+                
+                // Add activity
+                demoActivities.unshift({
+                    time: new Date().toISOString(),
+                    action: 'Account Approved',
+                    user: demoRequests[requestIndex].matricule,
+                    details: `User approved - Department: ${department}, Role: ${role}`
+                });
+                
+                // Update UI
+                loadRegistrationRequests();
+                loadActivities();
+                closeModal();
+                
+                alert(`✅ User ${demoRequests[requestIndex].matricule} approved successfully!`);
+                
+                // In production: Send notification to user
+                console.log(`User ${demoRequests[requestIndex].matricule} approved. Notification sent.`);
+            }
+        }
+
+        function rejectRequest() {
+            const reason = document.getElementById('rejectionReason').value;
+            const notes = document.getElementById('rejectionNotes').value;
+            
+            if (!reason) {
+                alert('Please select a reason for rejection');
+                return;
+            }
+            
+            const requestIndex = demoRequests.findIndex(r => r.id === currentRequestId);
+            if (requestIndex !== -1) {
+                // Update request status
+                demoRequests[requestIndex].status = 'rejected';
+                demoRequests[requestIndex].rejectionReason = reason;
+                demoRequests[requestIndex].rejectionNotes = notes;
+                demoRequests[requestIndex].rejectedAt = new Date().toISOString();
+                
+                // Add activity
+                demoActivities.unshift({
+                    time: new Date().toISOString(),
+                    action: 'Account Rejected',
+                    user: demoRequests[requestIndex].matricule,
+                    details: `Registration rejected - Reason: ${reason}`
+                });
+                
+                // Update UI
+                loadRegistrationRequests();
+                loadActivities();
+                closeModal();
+                
+                alert(`❌ Request ${demoRequests[requestIndex].matricule} rejected.`);
+                
+                // In production: Send notification to user
+                console.log(`User ${demoRequests[requestIndex].matricule} rejected. Notification sent.`);
+            }
+        }
+
+        function viewRequest(requestId) {
+            const request = demoRequests.find(r => r.id === requestId);
+            if (request) {
+                alert(`
+                    📋 Request Details:
+                    
+                    Request ID: ${request.id}
+                    Matricule: ${request.matricule}
+                    Department: ${request.department || 'Not specified'}
+                    Status: ${request.status}
+                    Request Date: ${request.requestedAt}
+                    
+                    ${request.assignedDepartment ? `Assigned Department: ${request.assignedDepartment}` : ''}
+                    ${request.assignedRole ? `Assigned Role: ${request.assignedRole}` : ''}
+                    ${request.approvedAt ? `Approved At: ${request.approvedAt}` : ''}
+                    ${request.rejectionReason ? `Rejection Reason: ${request.rejectionReason}` : ''}
+                `);
+            }
+        }
+
+        function exportToExcel() {
+            // Simple CSV export for demo
+            let csv = 'Request ID,Matricule,Department,Status,Request Date\n';
+            
+            demoRequests.forEach(request => {
+                csv += `${request.id},${request.matricule},${request.department || ''},${request.status},${request.requestedAt}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `registration-requests-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            alert('📥 CSV file downloaded successfully!');
+        }
+
+        // Sidebar navigation
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Show corresponding section
+                const targetId = this.getAttribute('href').substring(1);
+                document.querySelectorAll('section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                document.getElementById(targetId).style.display = 'block';
+            });
+        });
+
+        // Handle window clicks to close modal
+        window.addEventListener('click', function(event) {
+            const approvalModal = document.getElementById('approvalModal');
+            const rejectionModal = document.getElementById('rejectionModal');
+            
+            if (event.target === approvalModal) {
+                closeModal();
+            }
+            
+            if (event.target === rejectionModal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
